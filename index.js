@@ -1,11 +1,19 @@
 //require for servers, import for client (generally)
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const PORT = 3000; //letters?
 
-app.get(`/`, (req, res) => {
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200,
+}
+
+app.get(`/`, cors(corsOptions), (req, res) => {
   res.send({
     hello: 'hello world',
+    // response: res,
+    // request: req,
   })
 })
 
