@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors');
 const PORT = 3000; //letters?
 
-const whitelist = ['www.budgetree.com', 'http://localhost:5173/']
+const whitelist = ['www.mybudgetree.com', 'http://localhost:5173/']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
