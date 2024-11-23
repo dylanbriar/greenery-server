@@ -4,15 +4,19 @@ const app = express();
 const cors = require('cors');
 const PORT = 3000; //letters?
 
-const whitelist = ['https://www.mybudgetree.com', 'http://localhost:5173/']
+const whitelist = ['https://www.mybudgetree.com', 'http://localhost:5173']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true)
     } else {
+      console.log('Blocked origin:', origin)
       callback(new Error('Not allowed by CORS'))
     }
-  }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  credentials: true
 }
 
 // var corsOptions = {
@@ -20,7 +24,9 @@ const corsOptions = {
 //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 
-app.get(`/`, cors(corsOptions), (req, res) => {
+app.use(cors(corsOptions))
+
+app.get(`/`, (req, res) => {
   res.send({
     hello: 'hello world',
     // response: res,
@@ -28,6 +34,17 @@ app.get(`/`, cors(corsOptions), (req, res) => {
   })
 })
 
+app.use((err, req, res, next) => {
+  if (err.message === 'Not allowed by CORS') {
+    res.status(403).json({
+      error: 'CORS Error',
+      message: 'Origin not allowed',
+      origin: req.headers.origin
+    });
+  } else {
+    next(err);
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Port ${PORT} is listening...`);
