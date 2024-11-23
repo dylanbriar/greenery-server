@@ -5,7 +5,7 @@ const cors = require('cors');
 const PORT = 3000; //letters?
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: 'www.budgetree.com',
   optionsSuccessStatus: 200,
 }
 
