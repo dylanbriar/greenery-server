@@ -4,9 +4,15 @@ const app = express();
 const cors = require('cors');
 const PORT = 3000; //letters?
 
+const whitelist = ['www.budgetree.com', 'http://localhost:5173/']
 const corsOptions = {
-  origin: 'www.budgetree.com',
-  optionsSuccessStatus: 200,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
 }
 
 app.get(`/`, cors(corsOptions), (req, res) => {
